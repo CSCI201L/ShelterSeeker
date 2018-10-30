@@ -85,13 +85,13 @@ public class Search extends HttpServlet {
 			while(rs.next()) {
 				Shelter currentShelter = new Shelter();
 				currentShelter.availability = rs.getInt("availability");
-				currentShelter.biography = rs.getString("biography");
+				currentShelter.bio = rs.getString("biography");
 				currentShelter.id = rs.getInt("id");
-				currentShelter.numKids = rs.getInt("kids");
-				currentShelter.numPets = rs.getInt("pets");
-				currentShelter.phoneNumber = rs.getInt("phoneNumber");
-				currentShelter.rating = rs.getDouble("currentRating");
-				currentShelter.zipCode = rs.getInt("zipCode");
+				currentShelter.kids = rs.getInt("kids");
+				currentShelter.pets = rs.getInt("pets");
+				currentShelter.phoneNumber = rs.getString("phoneNumber");
+				currentShelter.currentRating = rs.getDouble("currentRating");
+				currentShelter.zipcode = rs.getInt("zipCode");
 				shelters.add(currentShelter);
 			}
 			
@@ -100,8 +100,8 @@ public class Search extends HttpServlet {
 					URL url;
 					try {
 						url = new URL("https://www.zipcodeapi.com/rest/" +
-							"dYZyo4NBkBmvPIE8EzqA3NABipAJG4wFOLkvJdTFufVARAcVmSE2HCVf8NRp4imi/distance.json/" + 
-							Integer.toString(searcherZipCode) + "/" + Integer.toString(lhs.zipCode) + "/mile");
+							"9HLyben8mTWrufUHjtMBoVFTOkmyM0MmjxyJ6IwJqAKQjHee7r3gMZBgSgs2Wafe/distance.json/" + 
+							Integer.toString(searcherZipCode) + "/" + Integer.toString(lhs.zipcode) + "/mile");
 						HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 						connection.setRequestMethod("GET");
 					    connection.connect();
@@ -120,8 +120,8 @@ public class Search extends HttpServlet {
 				    	}
 				    	
 				    	url = new URL("https://www.zipcodeapi.com/rest/" +
-								"dYZyo4NBkBmvPIE8EzqA3NABipAJG4wFOLkvJdTFufVARAcVmSE2HCVf8NRp4imi/distance.json/" + 
-								Integer.toString(searcherZipCode) + "/" + Integer.toString(rhs.zipCode) + "/mile");
+								"9HLyben8mTWrufUHjtMBoVFTOkmyM0MmjxyJ6IwJqAKQjHee7r3gMZBgSgs2Wafe/distance.json/" + 
+								Integer.toString(searcherZipCode) + "/" + Integer.toString(rhs.zipcode) + "/mile");
 						connection = (HttpURLConnection)url.openConnection();
 						connection.setRequestMethod("GET");
 					    connection.connect();
@@ -147,7 +147,7 @@ public class Search extends HttpServlet {
 //				    	System.out.println(result);
 //				    	System.out.println("*****");
 				    	if (result == 0) { // Same ZipCode, sort by rating
-				    		if (lhs.rating > rhs.rating) result = -1;
+				    		if (lhs.currentRating > rhs.currentRating) result = -1;
 				    		else result = 1;
 				    	}
 				    	return result;
@@ -159,8 +159,13 @@ public class Search extends HttpServlet {
 				}	
 			});
 			
+	    	response.setContentType("text");
+			PrintWriter out = response.getWriter();
+			
 			for(Shelter s : shelters) {
-				s.printInfo();
+				out.println(s.id);
+				out.println(s.bio);
+				out.println(s.zipcode);
 			}
 			
 //			
