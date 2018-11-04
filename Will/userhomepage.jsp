@@ -132,6 +132,9 @@
 					if (j % 3 == 0) currentCell.style.width = "450px";
 					else if (j % 3 == 1) currentCell.style.width ="200px";
 					else currentCell.style.width ="250px";
+					currentCell.addEventListener('click', function() {
+						loadSearchResult(responseArray[i]);
+					});
 				}
 				
 			}
@@ -140,6 +143,12 @@
 		}
 		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhttp.send("email=borie@usc.edu&pharmacyNearby=false&groceryNearby=true&laundromatNearby=false"); 
+	}
+	
+	function loadSearchResult(shelterId) {
+		console.log(shelterId);
+		document.location.href = "http://localhost:8080/borie_CSCI201L_Final_Project/searchResult?shelterId=" + 
+				shelterId;
 	}
 	</script>
 </body>

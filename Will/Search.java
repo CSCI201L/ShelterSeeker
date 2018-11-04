@@ -100,7 +100,7 @@ public class Search extends HttpServlet {
 					URL url;
 					try {
 						url = new URL("https://www.zipcodeapi.com/rest/" +
-							"9HLyben8mTWrufUHjtMBoVFTOkmyM0MmjxyJ6IwJqAKQjHee7r3gMZBgSgs2Wafe/distance.json/" + 
+							"gXTMe761UEknkYBpIgAKOX00rBZVwMLWF4YtS1sCoLjOlv85TmL1YBLKzSRqtuYj/distance.json/" + 
 							Integer.toString(searcherZipCode) + "/" + Integer.toString(lhs.zipcode) + "/mile");
 						HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 						connection.setRequestMethod("GET");
@@ -120,7 +120,7 @@ public class Search extends HttpServlet {
 				    	}
 				    	
 				    	url = new URL("https://www.zipcodeapi.com/rest/" +
-								"9HLyben8mTWrufUHjtMBoVFTOkmyM0MmjxyJ6IwJqAKQjHee7r3gMZBgSgs2Wafe/distance.json/" + 
+								"gXTMe761UEknkYBpIgAKOX00rBZVwMLWF4YtS1sCoLjOlv85TmL1YBLKzSRqtuYj/distance.json/" + 
 								Integer.toString(searcherZipCode) + "/" + Integer.toString(rhs.zipcode) + "/mile");
 						connection = (HttpURLConnection)url.openConnection();
 						connection.setRequestMethod("GET");
