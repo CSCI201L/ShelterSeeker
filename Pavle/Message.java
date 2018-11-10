@@ -7,17 +7,17 @@ public class Message implements Comparable<Message> {
    public int recipient;
    public int sender = 0;
    public Byte read = 0;
-   public String timeSent = "";
+   public long timeSent = 0;
 
    public Message(String subject, String body, int recipient) {
       this.subject = subject;
       this.body = body;
       this.recipient = recipient;
 
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
       LocalDateTime now = LocalDateTime.now();
 
-      timeSent = dtf.format(now);
+      timeSent = Long.parseLong(dtf.format(now));
    }
 
    public Message(String subject, String body, int recipient, byte read) {
@@ -26,10 +26,10 @@ public class Message implements Comparable<Message> {
       this.recipient = recipient;
       this.read = read;
 
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
       LocalDateTime now = LocalDateTime.now();
 
-      timeSent = dtf.format(now);
+      timeSent = Long.parseLong(dtf.format(now));
    }
 
    public Message() {
