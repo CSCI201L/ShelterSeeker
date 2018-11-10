@@ -37,26 +37,28 @@
 	</div>
 	<div id="middle">
 	<form action="javascript:onSearch();"><!-- action=""> -->
-      <input type="text" placeholder="Search Shelters near Location" name="search">
-      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
-		<label for="filter">Kids allowed?</label>
-        <select >
-            <option value="0" selected>Yes</option>
-            <option value="1">No </option>
-        </select>      
+     	<input type="text" placeholder="Search Shelters near Location" name="search">
+     	<h4>Kids allowed? </h4>
+     	<input type="radio" id="criteriaKidsYes" name="criteriaKids" value="Yes"/>
+     	<label for="criteriaKidsYes">Yes</label>
+     	<input type="radio" id="criteriaKidsNo" name="criteriaKids" value="No"/>
+        <label for="criteriaKidsNo">No</label>
+
         <label for="filter">Pets allowed?</label>
-        <select>
-            <option value="0" selected>Yes</option>
-            <option value="1">No </option>
+        <select id="criteriaPets">
+            <option value="Yes" selected>Yes</option>
+            <option value="No">No </option>
         </select>
           <label for="filter">Nearby Resources</label>
-        <select multiple="3">
-            <option value="0" selected>Pharmacy</option>
-            <option value="1">Grocery Store </option>
-            <option value="2">Laundromat </option>
+          
+        <select multiple id="criteriaResources">
+        	<option value="None" selected></option>
+            <option value="Pharmacy">Pharmacy</option>
+            <option value="Grocery">Grocery Store </option>
+            <option value="Laundromat">Laundromat </option>
         </select>       
-        Settling Rating
-         <input type="range" min="1" max="5" class="slider" id="myRange">
+        Minimum Shelter Rating
+         <input type="range" min="1" max="5" class="slider" id="criteriaMinRating">
       <button type="submit"><i class="fa fa-search"></i></button>
     </form>
 	Preferences 
@@ -93,6 +95,9 @@
 	}
 	
 	function onSearch() {
+		console.log(document.getElementsByName("criteriaKidsYes"));
+		console.log(document.getElementsByName("criteriaKidsNo"));
+
 		var xhttp = new XMLHttpRequest();
 		xhttp.open("POST", "Search", true);
 		xhttp.onreadystatechange = function () {
