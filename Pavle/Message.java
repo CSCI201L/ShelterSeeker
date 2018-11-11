@@ -1,63 +1,41 @@
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 
-public class Message implements Comparable<Message> {
-   public String subject;
-   public String body;
-   public int recipient;
-   public int sender = 0;
-   public Byte read = 0;
-   public long timeSent = 0;
+public class Message {
+    public String subject;
+    public String body;
+    public String recipient;
+    public String sender;
+    public Byte read = 0;
+    public long timeSent = 0;
 
-   public Message(String subject, String body, int recipient) {
-      this.subject = subject;
-      this.body = body;
-      this.recipient = recipient;
-
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-      LocalDateTime now = LocalDateTime.now();
-
-      timeSent = Long.parseLong(dtf.format(now));
-   }
-
-   public Message(String subject, String body, int recipient, byte read) {
-      this.subject = subject;
-      this.body = body;
-      this.recipient = recipient;
-      this.read = read;
-
-      DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-      LocalDateTime now = LocalDateTime.now();
-
-      timeSent = Long.parseLong(dtf.format(now));
-   }
-
-   public Message() {
-      this.subject = "";
-      this.body = "";
-      this.recipient = -1;
-   }
-
-   public String readable(){
-      return subject + ": \n" + body + "\nSent on: " + timeSent + "\nSent to: " + recipient + "\nRead:" + read;
-   }
-
-   public void read(){
-       this.read = 1;
-   }
-
-   public void convertTimeToLong(String datetime){
-       int mult = 1;
-       for(int i = datetime.length(); i > -1; i--){
-           this.timeSent += (long)datetime.charAt(i) * mult;
-           mult *= 10;
-       }
-   }
-
-   @Override
-    public int compareTo(Message m) {
-        
-        return (int)(this.read - m.read);
+    // Default constructor
+    public Message() {
+        this.subject = "";
+        this.body = "";
+        this.recipient = "";
+        this.sender = "";
     }
 
+    //Constructor that actually sets values
+    public Message(String subject, String body, String sender, String recipient) {
+        this.subject = subject;
+        this.body = body;
+        this.recipient = recipient;
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime now = LocalDateTime.now();
+
+        timeSent = Long.parseLong(dtf.format(now));
+    }
+
+    //Parse into readable format for testing
+    public String readable() {
+        return subject + ": \n" + body + "\nSent on: " + timeSent + "\nSent to: " + recipient + "\nRead:" + read;
+    }
+
+    //Set whether a message is read
+    public void read() {
+        this.read = 1;
+    }
 }

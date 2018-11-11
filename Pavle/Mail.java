@@ -30,15 +30,19 @@ public class Mail {
 
       CompareMessageByReadAndTime comp = new CompareMessageByReadAndTime();
 
-      Message test2 = new Message("Subject2", "Body", 1, (byte)1);
-      Message test3 = new Message("Subject2", "Body", 1, (byte)0);
+      Message test1 = new Message("Subject1", "Body", "Test", "Test2");
+      Message test2 = new Message("Subject2", "Body", "Test", "Test2");
+
       try {
          Thread.sleep(5000);
       } catch (InterruptedException ex) {
          Thread.currentThread().interrupt();
       }
-      Message test1 = new Message("Subject1", "Body", 1, (byte)1);
-      Message test4 = new Message("Subject1", "Body", 1, (byte)0);
+      Message test3 = new Message("Subject3", "Body", "Test", "Test2");
+      Message test4 = new Message("Subject4", "Body", "Test", "Test2");
+
+      test1.read();
+      test3.read();
 
       mail.addMessage(test1);
       mail.addMessage(test2);
