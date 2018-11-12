@@ -23,6 +23,18 @@
 	    padding: 14px 16px;
 	    text-decoration: none;
 	}
+	#numKidsSection {
+		visibility: hidden;
+	}
+	#numPetsSection {
+		visibility: hidden;
+	}
+	#searchLoading {
+		visibility: hidden;
+	}
+	#searchYieldedNoResults {
+		visibility: hidden;
+	}
 	</style>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -36,36 +48,63 @@
 	</ul>
 	</div>
 	<div id="middle">
-	<form action="javascript:onSearch();"><!-- action=""> -->
-     	<input type="text" placeholder="Search Shelters near Location" name="search">
-     	<h4>Kids allowed? </h4>
-     	<input type="radio" id="criteriaKidsYes" name="criteriaKids" value="Yes"/>
+	<form action="javascript:onSearch();">
+     	
+     	<h4>I want to only see shelters that accept kids.</h4>
+     	<input type="radio" id="criteriaKidsYes" name="criteriaKids" onclick="javascript:showNumKidsSection();"/>
      	<label for="criteriaKidsYes">Yes</label>
-     	<input type="radio" id="criteriaKidsNo" name="criteriaKids" value="No"/>
+     	<input type="radio" id="criteriaKidsNo" name="criteriaKids" onclick="javascript:hideNumKidsSection();"/>
         <label for="criteriaKidsNo">No</label>
+        
+        <div id="numKidsSection">
+        	<h4>How many kids?</h4>
+        	<input type="text" id="criteriaNumKids"/>
+        </div>
+        
+        <h4>I want to only see shelters that allow for pets.</h4>
+        <input type="radio" id="criteriaPetsYes" name="criteriaPets" onclick="javascript:showNumPetsSection();"/>
+     	<label for="criteriaPetsYes">Yes</label>
+     	<input type="radio" id="criteriaPetsNo" name="criteriaPets" onclick="javascript:hideNumPetsSection();"/>
+        <label for="criteriaPetsNo">No</label>
+        
+        <div id="numPetsSection">
+        	<h4>How many pets?</h4>
+        	<input type="text" id="criteriaNumPets" />
+        </div>
 
-        <label for="filter">Pets allowed?</label>
-        <select id="criteriaPets">
-            <option value="Yes" selected>Yes</option>
-            <option value="No">No </option>
-        </select>
-          <label for="filter">Nearby Resources</label>
-          
-        <select multiple id="criteriaResources">
-        	<option value="None" selected></option>
-            <option value="Pharmacy">Pharmacy</option>
-            <option value="Grocery">Grocery Store </option>
-            <option value="Laundromat">Laundromat </option>
-        </select>       
-        Minimum Shelter Rating
-         <input type="range" min="1" max="5" class="slider" id="criteriaMinRating">
-      <button type="submit"><i class="fa fa-search"></i></button>
+        <h4>I want to only see shelters that are near these resources:</h4>
+        <input type="checkbox" id="criteriaPharmacy"/>
+        <label for="criteriaPharmacy">Pharmacy</label>
+        <input type="checkbox" id="criteriaGrocery"/>
+        <label for="criteriaGrocery">Grocery</label>
+        <input type="checkbox" id="criteriaLaundromat"/>
+        <label for="criteriaLaundromat">Laundromat</label>
+           
+        <h4>I want to only see shelters that have at least this Average User Rating: </h4>
+        <input type="radio" id="criteriaMinRating1" name="criteriaMinRating"/>
+        <label for="criteriaMinRating1">1 Star</label>
+        <input type="radio" id="criteriaMinRating2" name="criteriaMinRating"/>
+        <label for="criteriaMinRating2">2 Stars</label>
+        <input type="radio" id="criteriaMinRating3" name="criteriaMinRating"/>
+        <label for="criteriaMinRating3">3 Stars</label>
+        <input type="radio" id="criteriaMinRating4" name="criteriaMinRating"/>
+        <label for="criteriaMinRating4">4 Stars</label>
+        <input type="radio" id="criteriaMinRating5" name="criteriaMinRating"/>
+        <label for="criteriaMinRating5">5 Stars</label>
+        <br />
+        <br />
+        <input type="text" id="criteriaSearchByName" />
+        <label for="criteriaSearchByName">(Optional) Search by Shelter name</label>
+        <br />
+        <br />
+    	<button type="submit">Search for shelters near your location</button>
+    	
+    	<br />
+    	<br />
+    	<h4 id="searchLoading">Loading...</h4>
+    	<h4 id="searchYieldedNoResults">No shelters match the input criteria.</h4>
     </form>
-	Preferences 
-	<br/>
-	Location
-	<br/>
-	<button id="signout" onclick="signOut();">Sign out button</button>
+	
 	<div id="resultsTable">
 		<table id="searchResultsTable">
 			<thead>
@@ -82,7 +121,7 @@
 
 	</div> 
 		
-		
+	<button id="signout" onclick="signOut();">Sign out button</button>
 	</div>
 	<div id="bottom">
 	<footer></footer>
@@ -95,12 +134,68 @@
 	}
 	
 	function onSearch() {
-		console.log(document.getElementsByName("criteriaKidsYes"));
-		console.log(document.getElementsByName("criteriaKidsNo"));
+		let parameters = "email=borie@usc.edu";
+		let numKids = 0;
+		if (document.getElementById("criteriaKidsYes").checked) {
+			if (isNaN(document.getElementById("criteriaNumKids").value) || 
+					document.getElementById("criteriaNumKids").value.includes(".") ||
+					document.getElementById("criteriaNumKids").value.includes("-")) {
+				alert("Please enter a valid number of kids.");
+				return;
+			} else {
+				numKids = document.getElementById("criteriaNumKids").value;
+			}
+		}
+		parameters += "&numKids=" + numKids;
+		
+		let numPets = 0;
+		if (document.getElementById("criteriaPetsYes").checked) {
+			if (isNaN(document.getElementById("criteriaNumPets").value) || 
+					document.getElementById("criteriaNumPets").value.includes(".") ||
+					document.getElementById("criteriaNumPets").value.includes("-")) {
+				alert("Please enter a valid number of pets.");
+				return;
+			} else {
+				numPets = document.getElementById("criteriaNumPets").value;
+			}
+		}
+		parameters += "&numPets=" + numPets;
 
+		if (document.getElementById("criteriaPharmacy").checked)
+			parameters += "&pharmacyNearby=true";
+		else
+			parameters += "&pharmacyNearby=false";
+		
+		if (document.getElementById("criteriaGrocery").checked)
+			parameters += "&groceryNearby=true";
+		else
+			parameters += "&groceryNearby=false";
+		
+		if (document.getElementById("criteriaLaundromat").checked)
+			parameters += "&laundromatNearby=true";
+		else
+			parameters += "&laundromatNearby=false";
+		
+		if (document.getElementById("criteriaMinRating1").checked) 
+			parameters += "&minRating=1";
+		else if (document.getElementById("criteriaMinRating2").checked)
+			parameters += "&minRating=2";
+		else if (document.getElementById("criteriaMinRating3").checked)
+			parameters += "&minRating=3";
+		else if (document.getElementById("criteriaMinRating4").checked)
+			parameters += "&minRating=4";
+		else if (document.getElementById("criteriaMinRating5").checked)
+			parameters += "&minRating=5";
+		else 
+			parameters += "&minRating=0";
+		
+		parameters += "&searchByName=" + document.getElementById("criteriaSearchByName").value;
+		
 		var xhttp = new XMLHttpRequest();
 		xhttp.open("POST", "Search", true);
 		xhttp.onreadystatechange = function () {
+			document.getElementById("searchLoading").style.visibility = "hidden";
+			
 			// Put the response in an array format
 			let responseText = this.responseText;
 			let responseArray = []
@@ -126,6 +221,16 @@
 				}
 			}
 			
+			if (responseArray.length == 0) {
+				document.getElementById("searchYieldedNoResults").style.visibility = "visible";
+				document.getElementById("searchResultsTable").style.visibility = "hidden";
+				return;
+			}
+			else {
+				document.getElementById("searchYieldedNoResults").style.visibility = "hidden";
+				document.getElementById("searchResultsTable").style.visibility = "visible";
+			}
+			
 			// Put the retrieved search results into the table
 			for(let i = 0; i < responseArray.length; i+=3) {
 				let row = table.insertRow();
@@ -147,13 +252,31 @@
 			prevNumSearchResults = responseArray.length / 3;
 		}
 		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		xhttp.send("email=borie@usc.edu&pharmacyNearby=false&groceryNearby=true&laundromatNearby=false"); 
+		xhttp.send(parameters);
+		document.getElementById("searchLoading").style.visibility = "visible";
+		document.getElementById("searchResultsTable").style.visibility = "hidden";
 	}
 	
 	function loadSearchResult(shelterId) {
 		console.log(shelterId);
 		document.location.href = "http://localhost:8080/borie_CSCI201L_Final_Project/searchResult?shelterId=" + 
 				shelterId;
+	}
+	
+	function showNumKidsSection() {
+		document.getElementById("numKidsSection").style.visibility = "visible";
+	}
+	
+	function hideNumKidsSection() {
+		document.getElementById("numKidsSection").style.visibility = "hidden";
+	}
+	
+	function showNumPetsSection() {
+		document.getElementById("numPetsSection").style.visibility = "visible";
+	}
+	
+	function hideNumPetsSection() {
+		document.getElementById("numPetsSection").style.visibility = "hidden";
 	}
 	</script>
 </body>

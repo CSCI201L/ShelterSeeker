@@ -48,7 +48,15 @@ public class Search extends HttpServlet {
 			String pharmacyNearby = request.getParameter("pharmacyNearby");
 			String groceryNearby = request.getParameter("groceryNearby");
 			String laundromatNearby = request.getParameter("laundromatNearby");
-
+			String minRating = request.getParameter("minRating");
+			int numKids = Integer.parseInt(request.getParameter("numKids"));
+			int numPets = Integer.parseInt(request.getParameter("numPets"));
+			String searchByName = request.getParameter("searchByName");
+			boolean doSearchByName = true;
+			if (searchByName == "" || searchByName == null) doSearchByName = false;
+			System.out.println(searchByName);
+			System.out.println(doSearchByName);
+			
 			System.out.println("This user called search: " + request.getParameter("email"));
 			ps = conn.prepareStatement("SELECT userID from users where email=?");
 			ps.setString(1, request.getParameter("email"));
@@ -62,22 +70,21 @@ public class Search extends HttpServlet {
 			rs = ps.executeQuery();
 			rs.next();
 			int searcherZipCode = rs.getInt("zipcode");
-			int searcherNumKids = rs.getInt("kids");
-			int searcherNumPets = rs.getInt("pets");
 			System.out.println("Searcher's ZipCode: " + searcherZipCode);
-			System.out.println("Searcher's numKids: " + searcherNumKids);
-			System.out.println("Searcher's numPets: " + searcherNumPets);
 			
 			String searchStatement = "SELECT s.* FROM users u, shelterInfo s where u.userID = s.id ";
 			if(pharmacyNearby.equals("true")) searchStatement += " and nearPharmacy=1 ";
 			if(groceryNearby.equals("true")) searchStatement += " and nearGrocery=1 ";
 			if(laundromatNearby.equals("true")) searchStatement += " and nearLaundromat=1 ";
+			if(doSearchByName) searchStatement += getAdditionalSearchStatement(searchByName);
 			searchStatement += " and s.kids>=? ";
 			searchStatement += " and s.pets >=? ";
 			searchStatement += " and availability>0 ";
+			searchStatement += " and s.currentRating>=?";
 			ps = conn.prepareStatement(searchStatement);
-			ps.setInt(1, searcherNumKids);
-			ps.setInt(2, searcherNumPets);
+			ps.setInt(1, numKids);
+			ps.setInt(2, numPets);
+			ps.setDouble(3, Double.parseDouble(minRating));
 			
 			System.out.println("Executing this query: " + searchStatement);
 			rs = ps.executeQuery();
@@ -168,26 +175,11 @@ public class Search extends HttpServlet {
 			
 	    	response.setContentType("text");
 			PrintWriter out = response.getWriter();
-			
 			for(Shelter s : shelters) {
 				out.println(s.id);
 				out.println(s.bio);
 				out.println(s.zipcode);
 			}
-			
-//			
-//			URL url = new URL("https://www.zipcodeapi.com/rest/"
-//					+ "dYZyo4NBkBmvPIE8EzqA3NABipAJG4wFOLkvJdTFufVARAcVmSE2HCVf8NRp4imi/distance.json/90089/94301/mile");
-//			HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-//			connection.setRequestMethod("GET");
-//		    connection.connect();
-//		    InputStream is = connection.getInputStream();
-//		    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		   
-			
-//	    	response.setContentType("text");
-//			PrintWriter out = response.getWriter();
-	    	
 	    	
 		} catch (SQLException sqe) {
 			System.out.println("sqe in search: " + sqe.getMessage());
@@ -196,8 +188,31 @@ public class Search extends HttpServlet {
 		} catch (Exception e) {
 			System.out.println("e in search: " + e.getMessage());
 		}
-		
-		
 	}
-
+	
+	private String getAdditionalSearchStatement(String s) {
+		String additionalStatement = "and ( 0 ";
+		char lastChar = ' ';
+		String currentWord = "";
+		for(int i = 0; i < s.length(); i++) {
+			char currentChar = s.charAt(i);
+			if (currentChar != ' ')
+				currentWord += currentChar;
+			else if (lastChar != ' ') {
+				additionalStatement += " or LOWER(s.shelterName) like '%" +  currentWord.toLowerCase() + "%' ";
+				currentWord = "";
+			}		
+			else {
+				currentWord = "";
+			}
+			lastChar = currentChar;		
+		}
+		if (currentWord != "" && additionalStatement.indexOf(currentWord.toLowerCase()) == -1) {
+			additionalStatement += " or LOWER(s.shelterName) like '%" +  currentWord.toLowerCase() + "%' ";
+		}
+		additionalStatement += " ) ";
+		System.out.print("Adding this parameter to SQL statement: ");
+		System.out.println(additionalStatement);
+		return additionalStatement;
+	}
 }

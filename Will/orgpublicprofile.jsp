@@ -54,10 +54,6 @@
 		Phone Number: <%= phoneNumber %> <br>
 		Biography: <%= bio %> <br>
 		Rating: <%= currentRating %> <br>
-		 
-		</div>
-		<div id="preferences">
-		<h3>Org Information</h3>
 		Pets? <%= pets %> <br>
 		Children? <%= kids %> <br>
 		Near a pharmacy? <%= nearPharmacy %> <br>
