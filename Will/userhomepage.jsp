@@ -99,10 +99,15 @@
         <label for="criteriaAvailableNo">No</label>
         <br />
         <br />
+        <input type="text" id="criteriaZipCode" value="replaceDefaultWithSession"/>
+        <label for="criteriaZipCode">Search for shelters near this Zip Code</label>
+        <br />
+        <br />
         <input type="text" id="criteriaSearchByName" />
         <label for="criteriaSearchByName">(Optional) Search by Shelter name</label>
         <br />
         <br />
+        
     	<button type="submit">Search for shelters near your location</button>
     	
     	<br />
@@ -198,6 +203,15 @@
 		if (document.getElementById("criteriaAvailableYes").checked)
 			parameters += "&showAvailableOnly=true";
 		else parameters += "&showAvailableOnly=false";
+		
+		if (document.getElementById("criteriaZipCode").value == "")
+			parameters += "&zipCode=94301"; // !!!!! Hard coded, use session!
+		else if (isNaN(document.getElementById("criteriaZipCode").value) || 
+			document.getElementById("criteriaZipCode").value.length != 5) {
+			alert("Please enter a valid 5-digit ZipCode");
+			return;
+		} else parameters += "&zipCode=" + document.getElementById("criteriaZipCode").value;
+				
 		
 		parameters += "&searchByName=" + document.getElementById("criteriaSearchByName").value;
 		

@@ -52,6 +52,7 @@ public class Search extends HttpServlet {
 			String currentlyAvailable = request.getParameter("showAvailableOnly");
 			int numKids = Integer.parseInt(request.getParameter("numKids"));
 			int numPets = Integer.parseInt(request.getParameter("numPets"));
+			int searcherZipCode  = Integer.parseInt(request.getParameter("zipCode"));
 			String searchByName = request.getParameter("searchByName");
 			boolean doSearchByName = true;
 			if (searchByName == "" || searchByName == null) doSearchByName = false;
@@ -70,8 +71,9 @@ public class Search extends HttpServlet {
 			ps.setInt(1, searcherID);
 			rs = ps.executeQuery();
 			rs.next();
-			int searcherZipCode = rs.getInt("zipcode");
-			System.out.println("Searcher's ZipCode: " + searcherZipCode);
+			int userZipCode = rs.getInt("zipcode");
+			System.out.println("User's ZipCode: " + userZipCode);
+			System.out.println("Searcher's chosen ZipCode: " + searcherZipCode);
 			
 			String searchStatement = "SELECT s.* FROM users u, shelterInfo s where u.userID = s.id ";
 			if(pharmacyNearby.equals("true")) searchStatement += " and nearPharmacy=1 ";
