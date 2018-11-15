@@ -91,6 +91,12 @@
         <label for="criteriaMinRating4">4 Stars</label>
         <input type="radio" id="criteriaMinRating5" name="criteriaMinRating"/>
         <label for="criteriaMinRating5">5 Stars</label>
+        
+        <h4>I want to only see shelters that currently have availability.</h4>
+     	<input type="radio" id="criteriaAvailableYes" name="criteriaAvailable"/>
+     	<label for="criteriaAvailableYes">Yes</label>
+     	<input type="radio" id="criteriaAvailableNo" name="criteriaAvailable" />
+        <label for="criteriaAvailableNo">No</label>
         <br />
         <br />
         <input type="text" id="criteriaSearchByName" />
@@ -188,6 +194,10 @@
 			parameters += "&minRating=5";
 		else 
 			parameters += "&minRating=0";
+		
+		if (document.getElementById("criteriaAvailableYes").checked)
+			parameters += "&showAvailableOnly=true";
+		else parameters += "&showAvailableOnly=false";
 		
 		parameters += "&searchByName=" + document.getElementById("criteriaSearchByName").value;
 		

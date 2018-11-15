@@ -49,6 +49,7 @@ public class Search extends HttpServlet {
 			String groceryNearby = request.getParameter("groceryNearby");
 			String laundromatNearby = request.getParameter("laundromatNearby");
 			String minRating = request.getParameter("minRating");
+			String currentlyAvailable = request.getParameter("showAvailableOnly");
 			int numKids = Integer.parseInt(request.getParameter("numKids"));
 			int numPets = Integer.parseInt(request.getParameter("numPets"));
 			String searchByName = request.getParameter("searchByName");
@@ -76,11 +77,11 @@ public class Search extends HttpServlet {
 			if(pharmacyNearby.equals("true")) searchStatement += " and nearPharmacy=1 ";
 			if(groceryNearby.equals("true")) searchStatement += " and nearGrocery=1 ";
 			if(laundromatNearby.equals("true")) searchStatement += " and nearLaundromat=1 ";
+			if(currentlyAvailable.equals("true")) searchStatement += " and availability>0 ";
 			if(doSearchByName) searchStatement += getAdditionalSearchStatement(searchByName);
 			searchStatement += " and s.kids>=? ";
 			searchStatement += " and s.pets >=? ";
-			searchStatement += " and availability>0 ";
-			searchStatement += " and s.currentRating>=?";
+			searchStatement += " and s.currentRating>=? ";
 			ps = conn.prepareStatement(searchStatement);
 			ps.setInt(1, numKids);
 			ps.setInt(2, numPets);
