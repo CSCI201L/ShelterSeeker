@@ -49,6 +49,7 @@ public class searchResult extends HttpServlet {
 			shelter.nearPharmacy = rs.getByte("nearPharmacy");
 			shelter.nearGrocery = rs.getByte("nearGrocery");
 			shelter.nearLaundromat = rs.getByte("nearLaundromat");
+			shelter.shelterName = rs.getString("shelterName");
 			request.setAttribute("availability", Integer.toString(shelter.availability));
 			request.setAttribute("zipCode", Integer.toString(shelter.zipcode));
 			request.setAttribute("phoneNumber", shelter.phoneNumber);
@@ -59,6 +60,8 @@ public class searchResult extends HttpServlet {
 			request.setAttribute("nearPharmacy", shelter.nearPharmacy == 1 ? "Yes" : "No");
 			request.setAttribute("nearGrocery", shelter.nearGrocery == 1 ? "Yes" : "No");
 			request.setAttribute("nearLaundromat", shelter.nearLaundromat == 1 ? "Yes" : "No");
+			request.setAttribute("shelterID", Integer.toString(shelterId));
+			request.setAttribute("shelterName", shelter.shelterName);
 			request.getRequestDispatcher("orgpublicprofile.jsp").forward(request, response);
 			
 		} catch (Exception e) {

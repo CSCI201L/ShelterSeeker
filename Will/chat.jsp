@@ -126,6 +126,7 @@
 		var today = new Date();
 		var iso = today.toLocaleTimeString('en-US');
 		var time = iso.slice(0, 4) + " " + iso.slice(8,10);
+		document.getElementById("title").innerHTML = "Welcome to " + sessionStorage.getItem('shelterName') + "'s chat room!";
 		console.log(time);
 		
 		socket.onopen = function(event) {
@@ -168,7 +169,6 @@
 	</div>
 	<div class="column middle">
 		<div id="title">
-			Welcome to (Shelter Name) Chat Room!
 		</div>
 		<div id="chat"> 
 		</div>
