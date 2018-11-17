@@ -54,7 +54,9 @@
 		Zip Code: <%= zipCode %> <br>
 		Phone Number: <%= phoneNumber %> <br>
 		Biography: <%= bio %> <br>
-		Rating: <%= currentRating %> <br>
+		<div id="rating">
+			Rating: <%= currentRating %> <br>
+		</div>
 		Pets? <%= pets %> <br>
 		Children? <%= kids %> <br>
 		Near a pharmacy? <%= nearPharmacy %> <br>
@@ -68,15 +70,15 @@
 		<br />
 		<br />
 		<h4>Give this shelter a rating</h4>
-		<input type="radio" id="criteriaMinRating1" name="criteriaMinRating"/>
+		<input type="radio" id="criteriaMinRating1" name="criteriaMinRating" onclick="javascript:giveRatingOne();"/>
         <label for="criteriaMinRating1">1 Star</label>
-        <input type="radio" id="criteriaMinRating2" name="criteriaMinRating"/>
+        <input type="radio" id="criteriaMinRating2" name="criteriaMinRating" onclick="javascript:giveRatingTwo();"/>
         <label for="criteriaMinRating2">2 Stars</label>
-        <input type="radio" id="criteriaMinRating3" name="criteriaMinRating"/>
+        <input type="radio" id="criteriaMinRating3" name="criteriaMinRating" onclick="javascript:giveRatingThree();"/>
         <label for="criteriaMinRating3">3 Stars</label>
-        <input type="radio" id="criteriaMinRating4" name="criteriaMinRating"/>
+        <input type="radio" id="criteriaMinRating4" name="criteriaMinRating" onclick="javascript:giveRatingFour();"/>
         <label for="criteriaMinRating4">4 Stars</label>
-        <input type="radio" id="criteriaMinRating5" name="criteriaMinRating"/>
+        <input type="radio" id="criteriaMinRating5" name="criteriaMinRating" onclick="javascript:giveRatingFive();"/>
         <label for="criteriaMinRating5">5 Stars</label>
 		
 	</div>
@@ -92,6 +94,26 @@
 		document.location.href = "http://localhost:8080/borie_CSCI201L_Final_Project/chatRoomSignin.jsp";
 		
 	}
+	
+	function giveRatingOne() {giveRating(1);}
+	function giveRatingTwo() {giveRating(2);}
+	function giveRatingThree() {giveRating(3);}
+	function giveRatingFour() {giveRating(4);}
+	function giveRatingFive() {giveRating(5);}
+	
+	function giveRating(rating) {
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("POST", "GiveRating", true);
+		xhttp.onreadystatechange = function () {
+			let responseText = this.responseText;
+			document.getElementById("rating").innerHTML = "Rating: " + responseText.trim();
+		}
+		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		sessionStorage.setItem('email', "borie@usc.edu") // !!!!! Get rid of this and have it set on login !!!!!
+		xhttp.send("rating=" + rating + "&email=" + sessionStorage.getItem('email') +
+			"&shelterID=" + <%=(String)request.getAttribute("shelterID")%>);
+	}
+
 	
 	</script>
 	

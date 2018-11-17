@@ -181,11 +181,11 @@
 		<div id="rules">
 			<br> 
 			<p style="margin-top: 5%; font-weight: bold; text-align:center; font-size:20px"><ins>Chat Room Rules</ins></p>
-			<i> Rule 1 </i> <br> Be positive and helpful to other users <br><br>
-			<i> Rule 2 </i> <br> Be respectful to Shelter admins	<br><br>
-			<i> Rule 3 </i>  <br> Any signs of abuse will be kicked from the chat room<br><br>
-			<i> Rule 4 </i> <br>	Do not share any personal information you are not comfortable with<br><br>
-			<i> Rule 5 </i>  <br> Please call The National Domestic Violence Hotline at 1.800.799.SAFE<br><br>
+			<i> Rule 1 </i> <br> Be positive and helpful to other users. <br><br>
+			<i> Rule 2 </i> <br> Be respectful to Shelter administrators.	<br><br>
+			<i> Rule 3 </i>  <br> Any signs of abuse will lead to expulsion from the chat room.<br><br>
+			<i> Rule 4 </i> <br>	Do not share any personal information that you are not comfortable with.<br><br>
+			<i> Rule 5 </i>  <br> Please call The National Domestic Violence Hotline at 1.800.799.SAFE.<br><br>
 		</div>
 	</div>
 	

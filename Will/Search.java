@@ -56,8 +56,6 @@ public class Search extends HttpServlet {
 			String searchByName = request.getParameter("searchByName");
 			boolean doSearchByName = true;
 			if (searchByName == "" || searchByName == null) doSearchByName = false;
-			System.out.println(searchByName);
-			System.out.println(doSearchByName);
 			
 			System.out.println("This user called search: " + request.getParameter("email"));
 			ps = conn.prepareStatement("SELECT userID from users where email=?");
