@@ -122,7 +122,7 @@
 <script>
 	var socket;
 	function connectToServer() {
-		socket = new WebSocket("ws://localhost:8080/borie_CSCI201L_Final_Project/chatroomServerEndpoint");
+		socket = new WebSocket("ws://localhost:8080/ShelterSeeker/chatroomServerEndpoint");
 		var today = new Date();
 		var iso = today.toLocaleTimeString('en-US');
 		var time = iso.slice(0, 4) + " " + iso.slice(8,10);

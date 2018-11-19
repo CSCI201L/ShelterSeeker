@@ -1,4 +1,4 @@
-package API;
+package insertion;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Search extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static final String databaseUserName = "root";
-	static final String databasePassword = "password1";
+	static final String databasePassword = "root";
 	static final String databasePort = "3306";
-	static final String databaseName = "shelterSeeker";
+	static final String databaseName = "safeHands";
 	static final String googleAPIKey = "AIzaSyByHkT9nYExPGBdrF8go_Iep92WAnfloWk";
        
     public Search() {
@@ -41,10 +41,8 @@ public class Search extends HttpServlet {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:" + databasePort + "/" + 
-				databaseName + "?user=" + databaseUserName + "&password= " + databasePassword + 
-				"&useSSL=false&serverTimezone=UTC");
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/safeHands?user=root&password=root&useSSL=false");
 			String pharmacyNearby = request.getParameter("pharmacyNearby");
 			String groceryNearby = request.getParameter("groceryNearby");
 			String laundromatNearby = request.getParameter("laundromatNearby");

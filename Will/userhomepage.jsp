@@ -1,8 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page    
+    import="retrieval.DBHelper, retrieval.Message, retrieval.Mail,  javax.servlet.http.HttpServlet, 
+    javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, 
+    retrieval.CompareMessageByReadAndTime,java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
+	<%
+		DBHelper db = (DBHelper) request.getSession().getAttribute("DBHelper");
+		int zipCode = db.user.zipcode;
+		String email = db.user.email;
+		System.out.println(db.didConnect() + " is status");
+	%>
 	<title>Shelter Seeker User Home Page</title>
 	<style>
 	li {
@@ -41,7 +51,7 @@
 <body>
 	<div id="top">
 	<ul>
-		<li><a href="search.jsp">Search</a></li>
+		<li><a href="userhomepage.jsp">Search</a></li>
 		<li><a href="usermessages.jsp">Messages</a></li>
 		<li><a href="profile.jsp">Profile</a></li>
 	
@@ -99,7 +109,7 @@
         <label for="criteriaAvailableNo">No</label>
         <br />
         <br />
-        <input type="text" id="criteriaZipCode" value="replaceDefaultWithSession"/>
+        <input type="text" id="criteriaZipCode" value=<%=zipCode %> />
         <label for="criteriaZipCode">Search for shelters near this Zip Code</label>
         <br />
         <br />
@@ -145,7 +155,7 @@
 	}
 	
 	function onSearch() {
-		let parameters = "email=borie@usc.edu";
+		let parameters = "email=" + "<%=email%>";
 		let numKids = 0;
 		if (document.getElementById("criteriaKidsYes").checked) {
 			if (isNaN(document.getElementById("criteriaNumKids").value) || 
@@ -171,7 +181,6 @@
 			}
 		}
 		parameters += "&numPets=" + numPets;
-
 		if (document.getElementById("criteriaPharmacy").checked)
 			parameters += "&pharmacyNearby=true";
 		else
@@ -283,7 +292,7 @@
 	
 	function loadSearchResult(shelterId) {
 		console.log(shelterId);
-		document.location.href = "http://localhost:8080/borie_CSCI201L_Final_Project/searchResult?shelterId=" + 
+		document.location.href = "http://localhost:8080/ShelterSeeker/searchResult?shelterId=" + 
 				shelterId;
 	}
 	

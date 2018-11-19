@@ -1,4 +1,4 @@
-package API;
+package insertion;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -29,10 +29,8 @@ public class searchResult extends HttpServlet {
 		try {
 			int shelterId = Integer.parseInt(request.getParameter("shelterId"));
 			System.out.println("In search result service with shelterId = " + shelterId);
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:" + Search.databasePort + "/" + 
-				Search.databaseName + "?user=" + Search.databaseUserName + "&password= " + Search.databasePassword + 
-				"&useSSL=false&serverTimezone=UTC");
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/safeHands?user=root&password=root&useSSL=false");
 			ps = conn.prepareStatement("SELECT * FROM shelterInfo WHERE id=?");
 			ps.setInt(1, shelterId);
 			rs = ps.executeQuery();
@@ -49,7 +47,7 @@ public class searchResult extends HttpServlet {
 			shelter.nearPharmacy = rs.getByte("nearPharmacy");
 			shelter.nearGrocery = rs.getByte("nearGrocery");
 			shelter.nearLaundromat = rs.getByte("nearLaundromat");
-			shelter.shelterName = rs.getString("shelterName");
+			shelter.shelterName = rs.getString("own");
 			request.setAttribute("availability", Integer.toString(shelter.availability));
 			request.setAttribute("zipCode", Integer.toString(shelter.zipcode));
 			request.setAttribute("phoneNumber", shelter.phoneNumber);

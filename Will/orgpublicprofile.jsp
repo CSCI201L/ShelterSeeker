@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page    
+    import="retrieval.DBHelper, retrieval.Message, retrieval.Mail,  javax.servlet.http.HttpServlet, 
+    javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse, 
+    retrieval.CompareMessageByReadAndTime,java.util.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +18,11 @@
 	<%String nearGrocery = (String)request.getAttribute("nearGrocery"); %>
 	<%String nearLaundromat = (String)request.getAttribute("nearLaundromat"); %>
 	<%String shelterID = (String)request.getAttribute("shelterID"); %>
+	<%
+		DBHelper db = (DBHelper) request.getSession().getAttribute("DBHelper");
+		System.out.println(db.didConnect() + " is status");
+		String email = db.user.email;
+	%>
 	
 	<title>Shelter Seekers Organization Public Profile Page</title>
 	<style>
@@ -35,13 +44,19 @@
 		    padding: 14px 16px;
 		    text-decoration: none;
 		}
+		#requestSpotSection {
+			visibility: hidden;
+		}
+		#confirmRequestSent {
+			visibility: hidden;
+		}
 		</style>
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
 </head>
 <body>
 	<div id="top">
 	<ul>
-		<li><a href="search.jsp">Search</a></li>
+		<li><a href="userhomepage.jsp">Search</a></li>
 		<li><a href="usermessages.jsp">Messages</a></li>
 		<li><a href="profile.jsp">Profile</a></li>
 	</ul>
@@ -80,6 +95,28 @@
         <label for="criteriaMinRating4">4 Stars</label>
         <input type="radio" id="criteriaMinRating5" name="criteriaMinRating" onclick="javascript:giveRatingFive();"/>
         <label for="criteriaMinRating5">5 Stars</label>
+        <br />
+		<br />
+        <button id="requestSpot" onclick="clickRequestSpot();">Request a room</button>
+		<br />
+		<br />
+		<div id="requestSpotSection">
+			<form id="requestSpotForm" action="javascript:onRequestSpot();">
+				To: <input type="text" id="to"/>
+				<br />
+				<br />
+				Subject: <input type="text" id="subject" value="Requesting a shelter spot" />
+				<br />
+				<br />
+				Message:
+				<textarea rows="10" cols="50" form="requestSpotForm">I would like to request a spot in your shelter.
+				</textarea>
+				<br />
+				<br />
+				<input type="submit" value="Send Message"/>
+			</form>
+		</div>
+		<p id="confirmRequestSent">Your request has been sent!</p>
 		
 	</div>
 	<div id="bottom">
@@ -90,8 +127,8 @@
 	
 	function goToShelterChatRoom() {
 		sessionStorage.setItem('shelterID', <%=(String)request.getAttribute("shelterID")%>);
-		sessionStorage.setItem('shelterName', "<%=(String)request.getAttribute("shelterName")%>")
-		document.location.href = "http://localhost:8080/borie_CSCI201L_Final_Project/chatRoomSignin.jsp";
+		sessionStorage.setItem('shelterName', "<%=(String)request.getAttribute("shelterName")%>");
+		document.location.href = "http://localhost:8080/ShelterSeeker/chatRoomSignIn.jsp";
 		
 	}
 	
@@ -109,11 +146,19 @@
 			document.getElementById("rating").innerHTML = "Rating: " + responseText.trim();
 		}
 		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		sessionStorage.setItem('email', "borie@usc.edu") // !!!!! Get rid of this and have it set on login !!!!!
-		xhttp.send("rating=" + rating + "&email=" + sessionStorage.getItem('email') +
+		xhttp.send("rating=" + rating + "&email=" + "<%=email%>" +
 			"&shelterID=" + <%=(String)request.getAttribute("shelterID")%>);
 	}
-
+	
+	function clickRequestSpot() {
+		document.getElementById("requestSpotSection").style.visibility = "visible";
+	}
+	
+	function onRequestSpot() {
+		document.getElementById("requestSpot").remove();
+		document.getElementById("requestSpotSection").remove();
+		document.getElementById("confirmRequestSent").style.visibility = "visible";
+	}
 	
 	</script>
 	

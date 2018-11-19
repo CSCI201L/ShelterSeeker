@@ -1,4 +1,4 @@
-package API;
+package insertion;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,10 +30,8 @@ public class GiveRating extends HttpServlet {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:" + Search.databasePort + "/" + 
-				Search.databaseName + "?user=" + Search.databaseUserName + "&password= " + Search.databasePassword + 
-				"&useSSL=false&serverTimezone=UTC");
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/safeHands?user=root&password=root&useSSL=false");
 			System.out.println("In GiveRating service");
 			int shelterID = Integer.parseInt(request.getParameter("shelterID"));
 			double rating = Double.parseDouble(request.getParameter("rating"));
