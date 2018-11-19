@@ -22,6 +22,7 @@
 		DBHelper db = (DBHelper) request.getSession().getAttribute("DBHelper");
 		System.out.println(db.didConnect() + " is status");
 		String email = db.user.email;
+		String user = db.user.username;
 	%>
 	
 	<title>Shelter Seekers Organization Public Profile Page</title>
@@ -128,7 +129,8 @@
 	function goToShelterChatRoom() {
 		sessionStorage.setItem('shelterID', <%=(String)request.getAttribute("shelterID")%>);
 		sessionStorage.setItem('shelterName', "<%=(String)request.getAttribute("shelterName")%>");
-		document.location.href = "http://localhost:8080/ShelterSeeker/chatRoomSignIn.jsp";
+		sessionStorage.setItem('username', "<%=user%>");
+		document.location.href = "http://localhost:8080/ShelterSeeker/chat.jsp";
 		
 	}
 	
