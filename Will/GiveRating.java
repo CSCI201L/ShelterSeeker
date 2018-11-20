@@ -74,14 +74,26 @@ public class GiveRating extends HttpServlet {
 				ps.setInt(3, shelterID);
 				ps.execute();
 			} else {
-				if (ps != null) ps.close();
+				if (ps != null) ps.close();		
+				ps = conn.prepareStatement("SELECT rating FROM ratings where shelterID=? and userID!=?");
+				ps.setInt(1, shelterID);
+				ps.setInt(2, userID);
+				rs = ps.executeQuery();
+				double otherRatings = 0;
+				while(rs.next()) {
+					otherRatings += rs.getDouble("rating");
+					System.out.println(otherRatings);
+				}
+				System.out.println(rating);
+				System.out.println(numRatings);
+				
 				ps = conn.prepareStatement("UPDATE ratings SET rating=? where shelterID=? and userID=?");
 				ps.setDouble(1, rating);
 				ps.setInt(2, shelterID);
 				ps.setInt(3, userID);
 				ps.execute();
 				
-				newShelterRating = ((oldShelterRating * (numRatings - 1)) + rating) / (numRatings);
+				newShelterRating = (otherRatings + rating) / numRatings;// ((oldShelterRating * (numRatings - 1)) + rating) / (numRatings);
 				ps = conn.prepareStatement("UPDATE shelterInfo SET currentRating=? where id=?");
 				ps.setDouble(1, newShelterRating);
 				ps.setInt(2, shelterID);
