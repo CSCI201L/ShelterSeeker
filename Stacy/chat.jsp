@@ -5,41 +5,65 @@
 <head>
 <meta charset="UTF-8">
 <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Nunito+Sans" rel="stylesheet">
 <title>Chat Client</title>
 
 <style>
 	html, body{
-		margin: 0;
-  		height: 100%;
-		font-family: 'Quicksand', sans-serif;
-	}
-	li {
-   		display: inline;
-   		float:left;
-	}	
-	#top ul {
-	    list-style-type: none; 
-	    margin: 0;
-	    padding: 0;
-	    overflow: hidden;
-	    background-color: #9734D1; 
-	}
-	li a {
-	    display: block;
-	    color: white;
-	    text-align: center;
-	    padding: 14px 16px;
-	    text-decoration: none;
-	}
-	#footer {
-	    position: fixed;
-	    left: 0;
-	    right: 0; 
-	    bottom: 0;
-	    padding: 1rem;
-	    background-color: #9734D1;
-	    text-align: center; 
-	}
+			margin: 0;
+   			height: 100%;
+			font-family: 'Quicksand', sans-serif;
+			background-image: linear-gradient(to right, #7a5ce5, #a490ea, #7a5ce5);
+		}
+		
+		 .navbar {
+		 	background-color: #c5c1fe;
+		 	border-color:#c5c1fe;
+	      	margin-bottom: 0;
+	      	border-radius: 0;
+	      	color:white; 
+	    }
+		.navbar-default .navbar-brand {
+		    color: white;
+		}
+		.navbar-default .navbar-nav>li>a {
+		    color: white;
+		}
+		.navbar-default .navbar-nav>.active>a{
+			color: grey; 
+			background-color: white; 
+		}
+		.navbar-brand{
+    		padding: 0px 15px;
+    		margin-right: -15px;
+		}
+		.navbar-right{
+			margin-right: 0px;
+		}
+	    body{
+			background-image: linear-gradient(to right, #7a5ce5, #a490ea, #7a5ce5);
+			font-family: 'Nunito Sans', sans-serif;
+			color:white; 
+			height: 100%; 
+		}  
+	    footer {
+	      background-color: #c5c1fe;
+	      color: white;
+	      padding: 15px;
+	      position: fixed;
+		  bottom: 0;
+		  width: 100%;
+		  height: 5%; 
+	   
+		}
 	.container {
 	    border: 2px solid #dedede;
 	    background-color: #f1f1f1;
@@ -71,13 +95,14 @@
 	}
 	#chat{
 		overflow: scroll; 
-		border-color: #D89EFA;
+		border-color: white;
 		border-radius: 5px;
 		border-style: inset;
 		height: 70%;
 		width: 90%;
 		margin: auto; 
 		margin-top: 2%; 
+		color: white; 
 		
 	}
 	#formInput{
@@ -85,13 +110,7 @@
 		height: 4%;
 		margin-left: 5%; 
 	}
-	#submit{
-		height: 5%;
-		width: 13%;
-		font-family: 'Quicksand', sans-serif;
-		font-size: 20px;
-		
-	}
+	
 	#title{
 		margin-top: 2%;
 		font-size: 30px; 
@@ -108,11 +127,10 @@
     	width: 25%;
     	height: 100%; 
 	}
-
 	.column.middle {
 	    width: 70%;
 	    height: 100%;
-	    border-right: 1px dotted #D89EFA;
+	    border-right: 1px dotted white;
 	}
 	i{
 		font-size:20px;
@@ -123,16 +141,16 @@
 <script>
 	var socket;
 	function connectToServer() {
-		socket = new WebSocket("ws://localhost:8080/chatRoom/chatroomServerEndpoint");
+		socket = new WebSocket("ws://localhost:8080/ShelterSeeker/chatroomServerEndpoint");
 		var today = new Date();
 		var iso = today.toLocaleTimeString('en-US');
 		var time = iso.slice(0, 4) + " " + iso.slice(8,10);
+		document.getElementById("title").innerHTML = "Welcome to " + sessionStorage.getItem('shelterName') + "'s chat room!";
 		console.log(time);
 		
 		socket.onopen = function(event) {
-			
-			document.getElementById("chat").innerHTML += "you has successfully joined the conversation as " + sessionStorage.getItem('username');
-			socket.send(sessionStorage.getItem('username'));
+			document.getElementById("chat").innerHTML += "You have successfully joined the conversation as " + sessionStorage.getItem('username');
+			socket.send(sessionStorage.getItem('username') + "|" + sessionStorage.getItem('shelterID'));
 		}
 		
 		socket.onmessage = function(event) {
@@ -149,7 +167,7 @@
 		
 	}
 	function sendMessage() {
-		socket.send(document.getElementById("formInput").value);
+		socket.send(sessionStorage.getItem('shelterID') + "|" + document.getElementById("formInput").value);
 		return false;
 	}
 	function sendUserName(e) {
@@ -159,39 +177,51 @@
 			socket.send(document.getElementById("user").value);
 		}
 	}
-
 </script>
 			
 <body onload="connectToServer()">
-	<div id="top">
-	<ul>
-		<li><a href="search.jsp">Search</a></li>
-		<li><a href="signin.jsp">Log In</a></li>
-	</ul>
-	</div>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	  		<div class="navbar-header">
+		 	<figure class="navbar-brand">
+			  <img src="bed.png" style="width: 30px;height: 40px;">
+			</figure>	
+		</div>
+	    <ul class="nav navbar-nav">
+	   	 	<li><a style="font-size: 20px">Safe Hands</a></li>
+	      <li><a href="userhomepage.jsp">Search</a></li>
+	      <li><a href="usermessages.jsp">Messages</a></li>
+	      <li><a href="usersettings.jsp">Profile</a></li>
+	    </ul>
+	     <ul class="nav navbar-nav navbar-right">
+        	<li><a class="navbar-brand" href="signin.jsp">Sign Out</a></li>
+      	</ul>
+	  </div>
+	</nav>
 	<div class="column middle">
 		<div id="title">
-			Welcome to (Shelter Name) Chat Room!
 		</div>
 		<div id="chat"> 
 		</div>
 	
-		<input id="formInput" type="text" name="message" placeholder="Type message here...">
-		 <button id="submit" onClick="return sendMessage();">Send </button>
+		<input style="color:grey;" id="formInput" type="text" name="message" placeholder="Type message here...">
+		 <button style="width: 13%;" class="btn btn-md btn-default" id="submit" onClick="return sendMessage();">Send </button>
 	
 	</div>
 	<div class="column side">
 		<div id="rules">
 			<br> 
 			<p style="margin-top: 5%; font-weight: bold; text-align:center; font-size:20px"><ins>Chat Room Rules</ins></p>
-			<i> Rule 1 </i> <br> Be positive and helpful to other users <br><br>
-			<i> Rule 2 </i> <br> Be respectful to Shelter admins	<br><br>
-			<i> Rule 3 </i>  <br> Any signs of abuse will be kicked from the chat room<br><br>
-			<i> Rule 4 </i> <br>	Do not share any personal information you are not comfortable with<br><br>
-			<i> Rule 5 </i>  <br> Please call The National Domestic Violence Hotline at 1.800.799.SAFE<br><br>
+			<i> Rule 1 </i> <br> Be positive and helpful to other users. <br><br>
+			<i> Rule 2 </i> <br> Be respectful to Shelter administrators.	<br><br>
+			<i> Rule 3 </i>  <br> Any signs of abuse will lead to expulsion from the chat room.<br><br>
+			<i> Rule 4 </i> <br>	Do not share any personal information that you are not comfortable with.<br><br>
+			<i> Rule 5 </i>  <br> Please call The National Domestic Violence Hotline at 1.800.799.SAFE. for any other concerns.<br><br>
 		</div>
 	</div>
 	
-	<div id="footer"></div>
+	<footer class="container-fluid text-center">
+	  <p> © 2018 Safe Hands </p>
+	</footer>
 </body>
 </html>
